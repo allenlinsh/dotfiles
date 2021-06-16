@@ -1,1 +1,10 @@
-/Users/zebra/.gitconfig
+[user]
+	name = Allen Lin
+	email = allenlinsh@gmail.com
+[core]
+	excludesfile = /Users/zebra/.gitignore
+	editor = vim
+[alias]
+	history = log --graph --date-order --date=short --pretty=format:'%C(auto)%h%d %C(reset)%s %C(bold blue)%ce %C(reset)%C(green)%cr (%cd)'
+[pull]
+	ff = only
