@@ -1,6 +1,7 @@
 " Specify a directory for plugins
 let g:python3_host_prog = '/usr/local/bin/python3'
 let g:tex_flavor = 'latex'
+let g:netrw_dirhistmax = 0
 " let g:livepreview_previewer = 'skim'
 call plug#begin('~/.nvim/plugged')
 
@@ -24,13 +25,17 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'HerringtonDarkholme/yats.vim' " TS Syntax
 
 " LaTeX plugin
-Plug 'lervag/vimtex'
-"Plug 'xuhdev/vim-latex-live-preview', { 'for': 'latex' }
+Plug 'lervag/vimtex' "Plug 'xuhdev/vim-latex-live-preview', { 'for': 'latex' }
 
 " Initialize plugin system
 call plug#end()
 
+" Custom key remaps
 inoremap jj <ESC>
+nnoremap <C-t>n :tabnew<CR>
+nnoremap <C-t>q :tabclose<CR>
+nnoremap = <C-m>
+nmap <C-_> :VimtexCompile<CR>
 nmap <C-n> :NERDTreeToggle<CR>
 vmap ++ <plug>NERDCommenterToggle
 nmap ++ <plug>NERDCommenterToggle
@@ -69,6 +74,7 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 " ctrlp
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+let g:ctrlp_match_window = 'results:100' " overcome limit imposed by max height
 
 " j/k will move virtual lines (lines that wrap)
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -78,7 +84,25 @@ set encoding=utf8
 set guifont=Source\ Code\ Pro\ for\ Powerline:h11
 
 " airline
+let g:airline_theme = 'afterglow'
 let g:airline_powerline_fonts = 1
+let g:airline_section_b = '%{getcwd()}' " in section B of the status line display the CWD
+
+" Change airline positions
+function! AirlineInit()
+  let g:airline#extensions#tabline#enabled = 1           " enable airline tabline
+  let g:airline#extensions#tabline#show_close_button = 0 " remove 'X' at the end of the tabline
+  let g:airline#extensions#tabline#tabs_label = ''       " can put text here like BUFFERS to denote buffers
+  let g:airline#extensions#tabline#buffers_label = ''    " can put text here like TABS to denote tabs
+  let g:airline#extensions#tabline#fnamemod = ':t'       " disable file paths in the tab
+  let g:airline#extensions#tabline#show_tab_count = 0    " dont show tab numbers on the right
+  let g:airline#extensions#tabline#show_buffers = 0      " dont show buffers in the tabline
+  let g:airline#extensions#tabline#tab_min_count = 2     " minimum of 2 tabs needed to display the tabline
+  let g:airline#extensions#tabline#show_splits = 0       " disables the buffer name that displays on the right of the tabline
+  let g:airline#extensions#tabline#show_tab_nr = 0       " disable tab numbers                                   
+  let g:airline#extensions#tabline#show_tab_type = 0     " disables the weird orange arrow on the tabline
+endfunction
+autocmd User AirlineAfterInit call AirlineInit()
 
 set relativenumber
 
@@ -90,24 +114,6 @@ set shiftwidth=2
 set expandtab
 
 colorscheme afterglow
-
-" sync open file with NERDTree
-" " Check if NERDTree is open or active
-function! IsNERDTreeOpen()        
-  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
-endfunction
-
-" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
-" file, and we're not in vimdiff
-function! SyncTree()
-  if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
-    NERDTreeFind
-    wincmd p
-  endif
-endfunction
-
-" Highlight currently open buffer in NERDTree
-autocmd BufEnter * call SyncTree()
 
 " coc config
 let g:coc_global_extensions = [
@@ -172,6 +178,7 @@ function! s:show_documentation()
   endif
 endfunction
 
+" vimtex
 let g:vimtex_view_method = "skim"
 let g:vimtex_view_general_viewer = '/Applications/Skim.app/Contents/SharedSupport/displayline'
 let g:vimtex_view_general_options = '-r @line @pdf @tex'
