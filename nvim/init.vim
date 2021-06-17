@@ -30,9 +30,10 @@ Plug 'lervag/vimtex' "Plug 'xuhdev/vim-latex-live-preview', { 'for': 'latex' }
 " Initialize plugin system
 call plug#end()
 
-" Custom key remaps
+" Key mappings
 inoremap jj <ESC>
-nnoremap <C-t>n :tabnew<CR>
+nnoremap <C-a> gg<S-v>G
+nnoremap <C-t>n :tabnew<CR>:NERDTree<CR>
 nnoremap <C-t>q :tabclose<CR>
 nnoremap = <C-m>
 nmap <C-_> :VimtexCompile<CR>
@@ -41,8 +42,8 @@ vmap ++ <plug>NERDCommenterToggle
 nmap ++ <plug>NERDCommenterToggle
 
 " open NERDTree automatically
-"autocmd StdinReadPre * let s:std_in=1
-"autocmd VimEnter * NERDTree
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 
 let g:NERDTreeGitStatusWithFlags = 1
 "let g:WebDevIconsUnicodeDecorateFolderNodes = 1
@@ -58,7 +59,7 @@ let g:NERDTreeGitStatusWithFlags = 1
     "\ "Ignored"   : "#808080"   
     "\ }                         
 
-
+let g:NERDTreeQuitOnOpen = 1
 let g:NERDTreeIgnore = ['^node_modules$']
 
 " vim-prettier
@@ -73,7 +74,7 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
 " ctrlp
 let g:ctrlp_working_path_mode = 0
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+"let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 let g:ctrlp_match_window = 'results:100' " overcome limit imposed by max height
 
 " j/k will move virtual lines (lines that wrap)
