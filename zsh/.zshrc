@@ -80,7 +80,7 @@ DISABLE_AUTO_TITLE="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-syntax-highlighting)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting docker docker-compose)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -149,7 +149,9 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 # Aliases
 alias hide="chflags hidden"
 alias show="chflags nohidden"
-alias config="vim ~/.zshrc"
+alias zconfig="vim ~/.zshrc"
+alias vimconfig="vim ~/.config/nvim/init.vim"
+alias gitconfig="vim ~/.gitconfig"
 alias unzip="tar -xvf"
 alias devices="xcrun xctrace list devices"
 alias vim="nvim"
@@ -159,6 +161,7 @@ alias la="ls -a"
 bindkey -e;
 bindkey '\e\e[C' forward-word;
 bindkey '\e\e[D' backward-word
+bindkey '^ ' autosuggest-accept
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 

@@ -20,24 +20,34 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ryanoasis/vim-devicons'
 
-"Plug 'morhetz/gruvbox'
-
 Plug 'HerringtonDarkholme/yats.vim' " TS Syntax
 
 " LaTeX plugin
-Plug 'lervag/vimtex' "Plug 'xuhdev/vim-latex-live-preview', { 'for': 'latex' }
+Plug 'lervag/vimtex'
+
+" Add maktaba and codefmt to the runtimepath.
+" (The latter must be installed before it can be used.)
+Plug 'google/vim-maktaba'
+Plug 'google/vim-codefmt'
+" Also add Glaive, which is used to configure codefmt's maktaba flags. See
+" `:help :Glaive` for usage.
+Plug 'google/vim-glaive'
 
 " Initialize plugin system
 call plug#end()
 
-" Key mappings
+" Initialize default formatter
+call glaive#Install()
+
+" Re-mappings
 inoremap jj <ESC>
 nnoremap <C-a> gg<S-v>G
-nnoremap <C-t>n :tabnew<CR>:NERDTree<CR>
-nnoremap <C-t>q :tabclose<CR>
+nnoremap <silent> <C-t>n :tabnew<CR>:NERDTree<CR>
+nnoremap <silent> <C-t>q :tabclose<CR>
+nnoremap <silent> <C-f> :FormatCode<CR>
 nnoremap = <C-m>
-nmap <C-_> :VimtexCompile<CR>
-nmap <C-n> :NERDTreeToggle<CR>
+nmap <silent> <C-_> :VimtexCompile<CR>
+nmap <silent> <C-n> :NERDTreeToggle<CR>
 vmap ++ <plug>NERDCommenterToggle
 nmap ++ <plug>NERDCommenterToggle
 
@@ -87,14 +97,15 @@ set guifont=Source\ Code\ Pro\ for\ Powerline:h11
 " airline
 let g:airline_theme = 'afterglow'
 let g:airline_powerline_fonts = 1
-let g:airline_section_b = '%{getcwd()}' " in section B of the status line display the CWD
+let g:airline#extensions#hunks#enabled = 1 " show summary of changed hunks under source control
+let g:airline#extensions#branch#enabled = 1 " enable git branch
 
 " Change airline positions
 function! AirlineInit()
   let g:airline#extensions#tabline#enabled = 1           " enable airline tabline
   let g:airline#extensions#tabline#show_close_button = 0 " remove 'X' at the end of the tabline
-  let g:airline#extensions#tabline#tabs_label = ''       " can put text here like BUFFERS to denote buffers
-  let g:airline#extensions#tabline#buffers_label = ''    " can put text here like TABS to denote tabs
+  let g:airline#extensions#tabline#tabs_label = ''       " can put text here like TABS to denote buffers
+  let g:airline#extensions#tabline#buffers_label = ''    " can put text here like BUFFERS to denote tabs
   let g:airline#extensions#tabline#fnamemod = ':t'       " disable file paths in the tab
   let g:airline#extensions#tabline#show_tab_count = 0    " dont show tab numbers on the right
   let g:airline#extensions#tabline#show_buffers = 0      " dont show buffers in the tabline
@@ -128,6 +139,7 @@ let g:coc_global_extensions = [
 " from readme
 " if hidden is not set, TextEdit might fail.
 set hidden " Some servers have issues with backup files, see #649 set nobackup set nowritebackup " Better display for messages set cmdheight=2 " You will have bad experience for diagnostic messages when it's default 4000.
+set undofile
 set updatetime=300
 
 " don't give |ins-completion-menu| messages.
@@ -233,10 +245,6 @@ xmap if <Plug>(coc-funcobj-i)
 xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
 omap af <Plug>(coc-funcobj-a)
-
-" Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
-nmap <silent> <C-d> <Plug>(coc-range-select)
-xmap <silent> <C-d> <Plug>(coc-range-select)
 
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
