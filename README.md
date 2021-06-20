@@ -1,4 +1,4 @@
-# Nothing but dotfiles
+# :paperclip: Nothing but dotfiles
 Clone and extract this repo into the `~/.config` folder to see the magic
 ## Prerequisites
 For MacOS, use `brew install [package]` \
