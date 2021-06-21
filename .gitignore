@@ -1,0 +1,9 @@
+# debian
+cros-garcon.conf
+dconf/
+neofetch/
+okularrc
+omf/
+weston.ini
+yarn/
+node_modules/

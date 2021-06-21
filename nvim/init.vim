@@ -1,8 +1,14 @@
+set encoding=utf8
+
+" Auto install missing plugins
+autocmd VimEnter *
+  \  if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
+  \|   PlugInstall | q
+  \| endif
+
 " Specify a directory for plugins
-let g:python3_host_prog = '/usr/local/bin/python3'
-let g:tex_flavor = 'latex'
-let g:netrw_dirhistmax = 0
-" let g:livepreview_previewer = 'skim'
+let g:python3_host_prog = '/usr/bin/python3'
+
 call plug#begin('~/.nvim/plugged')
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -12,25 +18,20 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'ryanoasis/vim-devicons'
 Plug 'airblade/vim-gitgutter'
-Plug 'ctrlpvim/ctrlp.vim' " fuzzy find files
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'ryanoasis/vim-devicons'
-
-Plug 'HerringtonDarkholme/yats.vim' " TS Syntax
-
-" LaTeX plugin
 Plug 'lervag/vimtex'
 
-" Add maktaba and codefmt to the runtimepath.
-" (The latter must be installed before it can be used.)
+" Syntax validator
+Plug 'HerringtonDarkholme/yats.vim' " TS Syntax
+
+" Code formatter
 Plug 'google/vim-maktaba'
 Plug 'google/vim-codefmt'
-" Also add Glaive, which is used to configure codefmt's maktaba flags. See
-" `:help :Glaive` for usage.
 Plug 'google/vim-glaive'
 
 " Initialize plugin system
@@ -39,17 +40,19 @@ call plug#end()
 " Initialize default formatter
 call glaive#Install()
 
-" Re-mappings
+" custom remaps
 inoremap jj <ESC>
 nnoremap <C-a> gg<S-v>G
 nnoremap <silent> <C-t>n :tabnew<CR>:NERDTree<CR>
 nnoremap <silent> <C-t>q :tabclose<CR>
 nnoremap <silent> <C-f> :FormatCode<CR>
-nnoremap = <C-m>
 nmap <silent> <C-_> :VimtexCompile<CR>
-nmap <silent> <C-n> :NERDTreeToggle<CR>
+nmap <silent> <C-n> :NERDTreeToggle %:p:h<CR>
 vmap ++ <plug>NERDCommenterToggle
 nmap ++ <plug>NERDCommenterToggle
+
+" custom global setup
+let g:netrw_dirhistmax = 0
 
 " open NERDTree automatically
 autocmd StdinReadPre * let s:std_in=1
@@ -81,9 +84,8 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 "let g:prettier#autoformat = 0
 "autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
 
-
 " ctrlp
-let g:ctrlp_working_path_mode = 0
+let g:ctrlp_working_path_mode = 'c'
 "let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 let g:ctrlp_match_window = 'results:100' " overcome limit imposed by max height
 
@@ -91,8 +93,6 @@ let g:ctrlp_match_window = 'results:100' " overcome limit imposed by max height
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
-set encoding=utf8
-set guifont=Source\ Code\ Pro\ for\ Powerline:h11
 
 " airline
 let g:airline_theme = 'afterglow'
@@ -192,6 +192,11 @@ function! s:show_documentation()
 endfunction
 
 " vimtex
+let g:tex_flavor = "latex"
+let g:tex_fast = "cmMprs"
+let g:tex_conceal = ""
+let g:tex_fold_enabled = 0
+let g:tex_comment_nospell = 1
 let g:vimtex_view_method = "skim"
 let g:vimtex_view_general_viewer = '/Applications/Skim.app/Contents/SharedSupport/displayline'
 let g:vimtex_view_general_options = '-r @line @pdf @tex'
@@ -275,3 +280,7 @@ nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR> 
+
+if exists("g:loaded_webdevicons")
+  call webdevicons#refresh()
+endif
