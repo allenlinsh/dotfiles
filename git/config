@@ -3,6 +3,10 @@
 	email = allenlinsh@gmail.com
 [core]
 	editor = nvim
-	autocrlf = input
+	autocrlf = false
 [init]
 	defaultBranch = main
+[alias]
+	history = log --graph --date-order --date=short --pretty-format:'%C(auto) (reset) (bold blue)%ce %C(reset)%C(green)%cr (%cd)'
+[pull]
+	ff = only
