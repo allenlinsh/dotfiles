@@ -1,5 +1,4 @@
-set encoding=utf8
-
+"
 " Auto install missing plugins
 autocmd VimEnter *
   \  if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
@@ -40,27 +39,72 @@ call plug#end()
 " Initialize default formatter
 call glaive#Install()
 
-" custom remaps
+" ---------------------------------------------------------------------------
+" General
+" ---------------------------------------------------------------------------
+
 inoremap jj <ESC>
 nnoremap <C-a> gg<S-v>G
+nnoremap <silent> <CR> :noh<CR><CR>
+
+nnoremap <silent> <C-f> :FormatCode<CR>
+
+nnoremap <silent> <C-t>t :tabnext<CR>
 nnoremap <silent> <C-t>n :tabnew<CR>:NERDTree<CR>
 nnoremap <silent> <C-t>q :tabclose<CR>
-nnoremap <silent> <C-f> :FormatCode<CR>
-nmap <silent> <C-_> :VimtexCompile<CR>
+
 nmap <silent> <C-n> :NERDTreeToggle %:p:h<CR>
+
 vmap ++ <plug>NERDCommenterToggle
 nmap ++ <plug>NERDCommenterToggle
 
-" custom global setup
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
+
+" set the maximum number of modified directories
+" stored in the histroy file
 let g:netrw_dirhistmax = 0
 
-" open NERDTree automatically
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+set encoding=utf-8
+set scrolloff=3
+set number
+set relativenumber
+
+set ignorecase
+set smartcase
+set backspace=indent,eol,start
+
+set smarttab
+set expandtab
+set shiftwidth=2
+set tabstop=2
+
+filetype plugin indent on
+set autoindent
+
+set ruler
+set laststatus=2
+set splitbelow splitright
+
+colorscheme afterglow
+
+" switch to relative numbers in normal mode
+autocmd BufLeave * :set norelativenumber
+autocmd BufEnter * :set relativenumber
+autocmd InsertEnter * :set norelativenumber
+autocmd InsertLeave * :set relativenumber
+
+" ---------------------------------------------------------------------------
+" NERDTree
+" ---------------------------------------------------------------------------
 
 let g:NERDTreeGitStatusWithFlags = 1
-"let g:WebDevIconsUnicodeDecorateFolderNodes = 1
-"let g:NERDTreeGitStatusNodeColorization = 1
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:NERDTreeGitStatusNodeColorization = 1
 "let g:NERDTreeColorMapCustom = {
     "\ "Staged"   : "#0ee375",  
     "\ "Modified"  : "#d9bf91",  
@@ -71,11 +115,17 @@ let g:NERDTreeGitStatusWithFlags = 1
     "\ "Clean"     : "#87939A",   
     "\ "Ignored"   : "#808080"   
     "\ }                         
-
 let g:NERDTreeQuitOnOpen = 1
 let g:NERDTreeIgnore = ['^node_modules$']
 
-" vim-prettier
+" open NERDTree automatically
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+
+" ---------------------------------------------------------------------------
+" Prettier
+" ---------------------------------------------------------------------------
+
 "let g:prettier#quickfix_enabled = 0
 "let g:prettier#quickfix_auto_focus = 0
 " prettier command for coc
@@ -84,7 +134,10 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 "let g:prettier#autoformat = 0
 "autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
 
-" ctrlp
+" ---------------------------------------------------------------------------
+" CtrlP
+" ---------------------------------------------------------------------------
+
 let g:ctrlp_working_path_mode = 'c'
 "let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 let g:ctrlp_match_window = 'results:100' " overcome limit imposed by max height
@@ -93,14 +146,16 @@ let g:ctrlp_match_window = 'results:100' " overcome limit imposed by max height
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
+" ---------------------------------------------------------------------------
+" Airline
+" ---------------------------------------------------------------------------
 
-" airline
 let g:airline_theme = 'afterglow'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#hunks#enabled = 1 " show summary of changed hunks under source control
 let g:airline#extensions#branch#enabled = 1 " enable git branch
 
-" Change airline positions
+" tabline
 function! AirlineInit()
   let g:airline#extensions#tabline#enabled = 1           " enable airline tabline
   let g:airline#extensions#tabline#show_close_button = 0 " remove 'X' at the end of the tabline
@@ -116,18 +171,10 @@ function! AirlineInit()
 endfunction
 autocmd User AirlineAfterInit call AirlineInit()
 
-set relativenumber
+" ---------------------------------------------------------------------------
+" CoC
+" ---------------------------------------------------------------------------
 
-set smarttab
-set cindent
-set tabstop=2
-set shiftwidth=2
-" always uses spaces instead of tab characters
-set expandtab
-
-colorscheme afterglow
-
-" coc config
 let g:coc_global_extensions = [
   \ 'coc-snippets',
   \ 'coc-pairs',
@@ -136,15 +183,11 @@ let g:coc_global_extensions = [
   \ 'coc-prettier', 
   \ 'coc-json', 
   \ ]
-" from readme
-" if hidden is not set, TextEdit might fail.
-set hidden " Some servers have issues with backup files, see #649 set nobackup set nowritebackup " Better display for messages set cmdheight=2 " You will have bad experience for diagnostic messages when it's default 4000.
+set hidden
 set undofile
 set updatetime=300
-
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
-
 " always show signcolumns
 set signcolumn=yes
 
@@ -191,32 +234,29 @@ function! s:show_documentation()
   endif
 endfunction
 
-" vimtex
+" ---------------------------------------------------------------------------
+" VimTeX
+" ---------------------------------------------------------------------------
+
 let g:tex_flavor = "latex"
 let g:tex_fast = "cmMprs"
 let g:tex_conceal = ""
 let g:tex_fold_enabled = 0
 let g:tex_comment_nospell = 1
-let g:vimtex_view_method = "skim"
-let g:vimtex_view_general_viewer = '/Applications/Skim.app/Contents/SharedSupport/displayline'
-let g:vimtex_view_general_options = '-r @line @pdf @tex'
+let g:vimtex_view_method = "zathura"
 
-augroup vimtex_mac
-    autocmd!
-    autocmd User VimtexEventCompileSuccess call UpdateSkim()
-augroup END
-
-function! UpdateSkim() abort
-    let l:out = b:vimtex.out()
-    let l:src_file_path = expand('%:p')
-    let l:cmd = [g:vimtex_view_general_viewer, '-r']
-
-    if !empty(system('pgrep Skim'))
-    call extend(l:cmd, ['-g'])
-    endif
-
-    call jobstart(l:cmd + [line('.'), l:out, l:src_file_path])
+" Run latexmk in a tmux session
+function! TmuxSend()
+    let tex_file = expand('%:p')    " current file
+    let tex_cmd = 'latexmk -pdf -interaction=nonstopmode -cd ' . tex_file
+    let tmux_cmd = 'tmux send-keys -t vim_output.0 "' . tex_cmd . '" ENTER'
+    let output = system(tmux_cmd)   
 endfunction
+autocmd BufWrite *.tex :call TmuxSend()
+
+" ---------------------------------------------------------------------------
+" Misc
+" ---------------------------------------------------------------------------
 
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
@@ -281,6 +321,7 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR> 
 
+" Reload webdevicons
 if exists("g:loaded_webdevicons")
   call webdevicons#refresh()
 endif
