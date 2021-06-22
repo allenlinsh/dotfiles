@@ -1,0 +1,20 @@
+# General
+alias v='nvim'
+alias c='clear'
+
+# Git
+alias ga='git add'
+alias gaa='git add -A'
+alias gbr='git branch'
+alias gco='git checkout'
+alias gcl='git clone'
+alias gc='git commit'
+alias gd='git diff'
+alias gf='git fetch'
+alias gi='git init'
+alias gls='git log'
+alias gl='git pull'
+alias gp='git push'
+alias gr='git reset'
+alias grh='git reset --hard'
+alias gst='git status -sb'
