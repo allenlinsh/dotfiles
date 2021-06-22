@@ -172,6 +172,27 @@ endfunction
 autocmd User AirlineAfterInit call AirlineInit()
 
 " ---------------------------------------------------------------------------
+" VimTeX
+" ---------------------------------------------------------------------------
+
+let g:tex_flavor = "latex"
+let g:tex_fast = "cmMprs"
+let g:tex_conceal = ""
+let g:tex_fold_enabled = 0
+let g:tex_comment_nospell = 1
+let g:vimtex_view_method = "zathura"
+
+" Run latexmk in a tmux session
+function! TmuxSend()
+    let tex_file = expand('%:p')    " current file
+    let tex_cmd = 'latexmk -pdf -interaction=nonstopmode -cd ' . tex_file
+    let tmux_cmd = 'tmux send-keys -t vim_output.0 "' . tex_cmd . '" ENTER'
+    let output = system(tmux_cmd)   
+endfunction
+autocmd BufWrite *.tex :call TmuxSend()
+
+
+" ---------------------------------------------------------------------------
 " CoC
 " ---------------------------------------------------------------------------
 
@@ -233,30 +254,6 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
-
-" ---------------------------------------------------------------------------
-" VimTeX
-" ---------------------------------------------------------------------------
-
-let g:tex_flavor = "latex"
-let g:tex_fast = "cmMprs"
-let g:tex_conceal = ""
-let g:tex_fold_enabled = 0
-let g:tex_comment_nospell = 1
-let g:vimtex_view_method = "zathura"
-
-" Run latexmk in a tmux session
-function! TmuxSend()
-    let tex_file = expand('%:p')    " current file
-    let tex_cmd = 'latexmk -pdf -interaction=nonstopmode -cd ' . tex_file
-    let tmux_cmd = 'tmux send-keys -t vim_output.0 "' . tex_cmd . '" ENTER'
-    let output = system(tmux_cmd)   
-endfunction
-autocmd BufWrite *.tex :call TmuxSend()
-
-" ---------------------------------------------------------------------------
-" Misc
-" ---------------------------------------------------------------------------
 
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
