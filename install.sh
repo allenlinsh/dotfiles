@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/usr/bin/bash
 
 # check sudo permission
 if [ "$EUID" -ne 0 ]
