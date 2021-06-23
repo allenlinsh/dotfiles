@@ -1,9 +1,5 @@
-"
 " Auto install missing plugins
-autocmd VimEnter *
-  \  if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
-  \|   PlugInstall | q
-  \| endif
+autocmd VimEnter * if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)')) | PlugInstall | q | endif
 
 " Specify a directory for plugins
 let g:python3_host_prog = '/usr/bin/python3'
@@ -12,10 +8,8 @@ call plug#begin('~/.nvim/plugged')
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scrooloose/nerdtree'
-Plug 'tsony-tsonev/nerdtree-git-plugin'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'ryanoasis/vim-devicons'
+Plug 'vwxyutarooo/nerdtree-devicons-syntax'
 Plug 'airblade/vim-gitgutter'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'scrooloose/nerdcommenter'
@@ -44,36 +38,64 @@ call glaive#Install()
 " ---------------------------------------------------------------------------
 
 inoremap jj <ESC>
-nnoremap <C-a> gg<S-v>G
+inoremap kk <ESC>
 nnoremap <silent> <CR> :noh<CR><CR>
 
+" code formatter
 nnoremap <silent> <C-f> :FormatCode<CR>
 
-nnoremap <silent> <C-t>t :tabnext<CR>
+" vim tabs
 nnoremap <silent> <C-t>n :tabnew<CR>:NERDTree<CR>
+nnoremap <silent> <C-t>t :tabnext<CR>
 nnoremap <silent> <C-t>q :tabclose<CR>
 
+" nerdtree navigator
 nmap <silent> <C-n> :NERDTreeToggle %:p:h<CR>
 
+" toggle comments
 vmap ++ <plug>NERDCommenterToggle
 nmap ++ <plug>NERDCommenterToggle
 
+" move lines (arrow keys)
+nnoremap <silent> <C-Up> :m .-2<CR>==
+nnoremap <silent> <C-Down> :m .+1<CR>==
+inoremap <silent> <C-Up> <ESC>:m .-2<CR>==gi
+inoremap <silent> <C-Down> <ESC>:m .+1<CR>==gi
+vnoremap <silent> <C-Up> :m '<-2<CR>gv=gv
+vnoremap <silent> <C-Down> :m '>+1<CR>gv=gv
+
+" move lines (j/k)
 nnoremap <silent> <A-j> :m .+1<CR>==
 nnoremap <silent> <A-k> :m .-2<CR>==
-inoremap <silent> <A-j> <Esc>:m .+1<CR>==gi
-inoremap <silent> <A-k> <Esc>:m .-2<CR>==gi
+inoremap <silent> <A-j> <ESC>:m .+1<CR>==gi
+inoremap <silent> <A-k> <ESC>:m .-2<CR>==gi
 vnoremap <silent> <A-j> :m '>+1<CR>gv=gv
 vnoremap <silent> <A-k> :m '<-2<CR>gv=gv
+
+" jump between words (h/l)
+function! <SID>GotoPattern(pattern, dir) range
+    let g:_saved_search_reg = @/
+    let l:flags = "We"
+    if a:dir == "b"
+        let l:flags .= "b"
+    endif
+    for i in range(v:count1)
+        call search(a:pattern, l:flags)
+    endfor
+    let @/ = g:_saved_search_reg
+endfunction
+
+nnoremap <silent> <A-l> :<C-U>call <SID>GotoPattern('\(^\\|\<\)[A-Za-z0-9_]', 'f')<CR>
+nnoremap <silent> <A-h> :<C-U>call <SID>GotoPattern('\(^\\|\<\)[A-Za-z0-9_]', 'b')<CR>
 
 " set the maximum number of modified directories
 " stored in the histroy file
 let g:netrw_dirhistmax = 0
 
 set encoding=utf-8
-set scrolloff=3
-set number
-set relativenumber
+set guifont=Source\ Code\ Pro\ for\ Powerline:h14
 
+set scrolloff=3
 set ignorecase
 set smartcase
 set backspace=indent,eol,start
@@ -86,41 +108,38 @@ set tabstop=2
 filetype plugin indent on
 set autoindent
 
-set ruler
-set laststatus=2
 set splitbelow splitright
 
 colorscheme afterglow
 
-" switch to relative numbers in normal mode
-autocmd BufLeave * :set norelativenumber
-autocmd BufEnter * :set relativenumber
-autocmd InsertEnter * :set norelativenumber
-autocmd InsertLeave * :set relativenumber
+set number relativenumber
+
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
 
 " ---------------------------------------------------------------------------
 " NERDTree
 " ---------------------------------------------------------------------------
 
-let g:NERDTreeGitStatusWithFlags = 1
-let g:WebDevIconsUnicodeDecorateFolderNodes = 1
-let g:NERDTreeGitStatusNodeColorization = 1
-"let g:NERDTreeColorMapCustom = {
-    "\ "Staged"   : "#0ee375",  
-    "\ "Modified"  : "#d9bf91",  
-    "\ "Renamed"   : "#51C9FC",  
-    "\ "Untracked" : "#FCE77C",  
-    "\ "Unmerged"  : "#FC51E6",  
-    "\ "Dirty"     : "#FFBD61",  
-    "\ "Clean"     : "#87939A",   
-    "\ "Ignored"   : "#808080"   
-    "\ }                         
 let g:NERDTreeQuitOnOpen = 1
 let g:NERDTreeIgnore = ['^node_modules$']
 
 " open NERDTree automatically
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+
+" ---------------------------------------------------------------------------
+" NERDTree
+" ---------------------------------------------------------------------------
+
+" Devicons settings
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:NERDTreeDirArrowExpandable = "\u00a0"
+let g:NERDTreeDirArrowCollapsible = "\u00a0"
+let g:DevIconsEnableFoldersOpenClose = 1
 
 " ---------------------------------------------------------------------------
 " Prettier
@@ -139,7 +158,8 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 " ---------------------------------------------------------------------------
 
 let g:ctrlp_working_path_mode = 'c'
-"let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+let g:ctrlp_show_hidden = 1
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|ico|git|svn))$'
 let g:ctrlp_match_window = 'results:100' " overcome limit imposed by max height
 
 " j/k will move virtual lines (lines that wrap)
@@ -152,8 +172,33 @@ noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
 let g:airline_theme = 'afterglow'
 let g:airline_powerline_fonts = 1
-let g:airline#extensions#hunks#enabled = 1 " show summary of changed hunks under source control
-let g:airline#extensions#branch#enabled = 1 " enable git branch
+
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
+
+" airline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
 
 " tabline
 function! AirlineInit()
