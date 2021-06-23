@@ -37,9 +37,18 @@ call glaive#Install()
 " General
 " ---------------------------------------------------------------------------
 
+" clear status
 inoremap jj <ESC>
 inoremap kk <ESC>
 nnoremap <silent> <CR> :noh<CR><CR>
+
+" eol
+noremap q $
+vnoremap q $
+
+" quit nvim
+cnoremap Q qa!
+cnoremap W wq
 
 " code formatter
 nnoremap <silent> <C-f> :FormatCode<CR>
