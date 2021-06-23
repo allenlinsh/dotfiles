@@ -1,6 +1,8 @@
 # General
 alias v='nvim'
 alias c='clear'
+alias e='v ~/.config' 
+alias r='omf reload; tmux source-file ~/.config/tmux/tmux.conf'
 
 # Git
 alias ga='git add'

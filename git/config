@@ -1,6 +1,7 @@
 [user]
 	name = Allen Lin
 	email = allenlinsh@gmail.com
+	signingkey = 5B5FD31C09614F1D
 [core]
 	editor = nvim
 	autocrlf = false
@@ -21,3 +22,5 @@
 	side-by-side = true
 [interactive]
 	diffFilter = delta --color-only
+[gpg]
+	program = gpg2
