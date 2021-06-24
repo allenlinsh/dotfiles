@@ -38,8 +38,7 @@ call glaive#Install()
 " ---------------------------------------------------------------------------
 
 " clear status
-inoremap jj <ESC>
-inoremap kk <ESC>
+inoremap jj <ESC> inoremap kk <ESC>
 nnoremap <silent> <CR> :noh<CR><CR>
 
 " eol
@@ -54,16 +53,22 @@ cnoremap W wq
 nnoremap <silent> <C-f> :FormatCode<CR>
 
 " vim tabs
-nnoremap <silent> <C-t>n :tabnew<CR>:NERDTree<CR>
-nnoremap <silent> <C-t>t :tabnext<CR>
-nnoremap <silent> <C-t>q :tabclose<CR>
+nnoremap <silent> gtt :tabnew<CR>:NERDTree<CR>
+nnoremap <silent> gtn :tabnext<CR>
+nnoremap <silent> gtx :tabclose<CR>
+
+" vim windows
+nnoremap <silent> gww <C-w>w
+nnoremap <silent> gws <C-w>v
+nnoremap <silent> gwv <C-w>s
+nnoremap <silent> gwx <C-w>q
 
 " nerdtree navigator
-nmap <silent> <C-n> :NERDTreeToggle %:p:h<CR>
+nnoremap <silent> <C-n> :NERDTreeToggle %:p:h<CR>
 
 " toggle comments
-vmap ++ <plug>NERDCommenterToggle
-nmap ++ <plug>NERDCommenterToggle
+vnoremap ++ <plug>NERDCommenterToggle
+nnoremap ++ <plug>NERDCommenterToggle
 
 " move lines (arrow keys)
 nnoremap <silent> <C-Up> :m .-2<CR>==
@@ -180,7 +185,7 @@ noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 " ---------------------------------------------------------------------------
 
 let g:airline_theme = 'afterglow'
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 0
 
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
@@ -194,20 +199,20 @@ let g:airline_right_sep = '◀'
 let g:airline_symbols.linenr = '␊'
 let g:airline_symbols.linenr = '␤'
 let g:airline_symbols.linenr = '¶'
-let g:airline_symbols.branch = '⎇'
 let g:airline_symbols.paste = 'ρ'
 let g:airline_symbols.paste = 'Þ'
-let g:airline_symbols.paste = '∥'
 let g:airline_symbols.whitespace = 'Ξ'
 
-" airline symbols
+" powerline symbols
 let g:airline_left_sep = ''
 let g:airline_left_alt_sep = ''
 let g:airline_right_sep = ''
 let g:airline_right_alt_sep = ''
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = ''
+let g:airline_symbols.linenr = ''
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.dirty='⚡'
 
 " tabline
 function! AirlineInit()
@@ -332,8 +337,6 @@ xmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>a  <Plug>(coc-codeaction-selected)
 
 " Remap for do codeAction of current line
-nmap <leader>ac  <Plug>(coc-codeaction)
-" Fix autofix problem of current line
 nmap <leader>qf  <Plug>(coc-fix-current)
 
 " Create mappings for function text object, requires document symbols feature of languageserver.
