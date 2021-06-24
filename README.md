@@ -18,6 +18,28 @@ git init && git remote add origin https://github.com/allenlinsh/dotfiles.git && 
 ### Install nerd fonts
 Go to chrome-untrusted://crosh/html/nassh_preferences_editor.html
 
+Initial Color Palette
+```
+[
+  "#262626",
+  "#EB3800",
+  "hsla(130, 55%, 41%, 1)",
+  "hsla(26, 99%, 53%, 1)",
+  "hsla(211, 78%, 51%, 1)",
+  "#DB3DFF",
+  "#00A3A3",
+  "#FFFFFF",
+  "#D6D6D6",
+  "hsla(356, 93%, 65%, 1)",
+  "hsla(102, 80%, 69%, 1)",
+  "hsla(40, 100%, 63%, 1)",
+  "hsla(217, 100%, 90%, 1)",
+  "#F4B5FB",
+  "hsla(179, 72%, 58%, 1)",
+  "#F8F9FA"
+]
+```
+
 Custom CSS(URI)
 ```
 https://cdn.jsdelivr.net/gh/wernight/powerline-web-fonts@ba4426c
