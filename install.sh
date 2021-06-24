@@ -18,15 +18,23 @@ apt update -qq && apt install -qqy
   \ neovim
   \ fish
   \ curl
+  \ gcc
+  \ g++
   \ make
-  \ nodejs
   \ git
   \ latexmk
-  \ yarn
   \ python3
   \ python3-pip
   \ tmux
   \ > /dev/null 2> /dev/null
+
+# nodejs
+curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
+apt update -qq && apt install -qqy nodejs
+
+curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null
+echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list
+apt update -qq && apt install -qqy yarn
 
 # yarn
 yarn global add --silent
