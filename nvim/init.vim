@@ -41,9 +41,21 @@ call glaive#Install()
 inoremap jj <ESC> inoremap kk <ESC>
 nnoremap <silent> <CR> :noh<CR><CR>
 
-" eol
-noremap q $
-vnoremap q $
+" make j/k/0/$ move through line wrap
+nnoremap j gj
+nnoremap k gk
+nnoremap 0 g0
+nnoremap q g$
+vnoremap 0 g0
+vnoremap k gk
+vnoremap j gj
+vnoremap q g$
+
+" remap 0 and $
+nnoremap g0 0
+nnoremap gq $
+vnoremap g0 0
+vnoremap gq $
 
 " quit nvim
 cnoremap Q qa!
@@ -67,8 +79,8 @@ nnoremap <silent> gwx <C-w>q
 nnoremap <silent> <C-n> :NERDTreeToggle %:p:h<CR>
 
 " toggle comments
-vnoremap ++ <plug>NERDCommenterToggle
-nnoremap ++ <plug>NERDCommenterToggle
+vmap ++ <plug>NERDCommenterToggle
+nmap ++ <plug>NERDCommenterToggle
 
 " move lines (arrow keys)
 nnoremap <silent> <C-Up> :m .-2<CR>==
@@ -175,10 +187,6 @@ let g:ctrlp_working_path_mode = 'c'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|ico|git|svn))$'
 let g:ctrlp_match_window = 'results:100' " overcome limit imposed by max height
-
-" j/k will move virtual lines (lines that wrap)
-noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
-noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
 " ---------------------------------------------------------------------------
 " Airline
