@@ -24,3 +24,4 @@ node_modules
 # Custom
 configstore/
 coc/
+nextjs-nodejs/
