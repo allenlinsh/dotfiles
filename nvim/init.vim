@@ -1,23 +1,39 @@
-" Auto install missing plugins
-autocmd VimEnter * if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)')) | PlugInstall | q | endif
-
 " Specify a directory for plugins
 let g:python3_host_prog = '/usr/bin/python3'
 
 call plug#begin('~/.nvim/plugged')
 
+" Smart completion
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" File Navigator
 Plug 'scrooloose/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'vwxyutarooo/nerdtree-devicons-syntax'
+
+" Git support
 Plug 'airblade/vim-gitgutter'
+
+" Fuzzy finder
 Plug 'ctrlpvim/ctrlp.vim'
+
+" Quick comment
 Plug 'scrooloose/nerdcommenter'
+
+" Prettier
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+
+" Powerline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'christoomey/vim-tmux-navigator'
+
+" LaTeX
 Plug 'lervag/vimtex'
+
+" Snippet support
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
 " Syntax validator
 Plug 'HerringtonDarkholme/yats.vim' " TS Syntax
@@ -42,13 +58,13 @@ inoremap jj <ESC> inoremap kk <ESC>
 nnoremap <silent> <CR> :noh<CR><CR>
 
 " make j/k/0/$ move through line wrap
-nnoremap j gj
-nnoremap k gk
+nnoremap J gj
+nnoremap K gk
 nnoremap 0 g0
 nnoremap q g$
+vnoremap J gj
+vnoremap K gk
 vnoremap 0 g0
-vnoremap k gk
-vnoremap j gj
 vnoremap q g$
 
 " remap 0 and $
@@ -70,7 +86,7 @@ nnoremap <silent> gtn :tabnext<CR>
 nnoremap <silent> gtx :tabclose<CR>
 
 " vim windows
-nnoremap <silent> gww <C-w>w
+nnoremap <silent> gwn <C-w>w
 nnoremap <silent> gws <C-w>v
 nnoremap <silent> gwv <C-w>s
 nnoremap <silent> gwx <C-w>q
@@ -242,22 +258,28 @@ autocmd User AirlineAfterInit call AirlineInit()
 " VimTeX
 " ---------------------------------------------------------------------------
 
-let g:tex_flavor = "latex"
-let g:tex_fast = "cmMprs"
-let g:tex_conceal = ""
-let g:tex_fold_enabled = 0
-let g:tex_comment_nospell = 1
-let g:vimtex_view_method = "zathura"
+let g:tex_flavor="latex"
+let g:vimtex_view_method="zathura"
+let g:vimtex_quickfix_mode=0
+set conceallevel=1
+let g:tex_conceal='abdmg'
 
 " Run latexmk in a tmux session
 function! TmuxSend()
-    let tex_file = expand('%:p')    " current file
+    let tex_file = expand('%:p')
     let tex_cmd = 'latexmk -pdf -interaction=nonstopmode -cd ' . tex_file
     let tmux_cmd = 'tmux send-keys -t vim_output.0 "' . tex_cmd . '" ENTER'
     let output = system(tmux_cmd)   
 endfunction
 autocmd BufWrite *.tex :call TmuxSend()
 
+" ---------------------------------------------------------------------------
+" UltiSnips
+" ---------------------------------------------------------------------------
+
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 " ---------------------------------------------------------------------------
 " CoC
@@ -297,9 +319,8 @@ inoremap <silent><expr> <c-space> coc#refresh()
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" Or use `complete_info` if your vim support it, like:
-" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <ESC> pumvisible() ? "\<C-g>u\<ESC>" : "\<ESC>"
 
 " Use `[g` and `]g` to navigate diagnostics
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
