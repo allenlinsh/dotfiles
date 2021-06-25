@@ -55,15 +55,15 @@ call glaive#Install()
 
 " clear status
 inoremap jj <ESC> inoremap kk <ESC>
-nnoremap <silent> <CR> :noh<CR><CR>
+nnoremap <silent> <CR> :noh<CR>
 
 " make j/k/0/$ move through line wrap
-nnoremap J gj
-nnoremap K gk
+nnoremap j gj
+nnoremap k gk
 nnoremap 0 g0
 nnoremap q g$
-vnoremap J gj
-vnoremap K gk
+vnoremap j gj
+vnoremap k gk
 vnoremap 0 g0
 vnoremap q g$
 
@@ -71,7 +71,13 @@ vnoremap q g$
 nnoremap g0 0
 nnoremap gq $
 vnoremap g0 0
-vnoremap gq $
+vmap gq $
+
+" extend 0/q functions
+nnoremap dq dg$
+nnoremap dgq d$
+nnoremap d0 dg0
+nnoremap dg0 dg0
 
 " quit nvim
 cnoremap Q qa!
@@ -134,28 +140,39 @@ nnoremap <silent> <A-h> :<C-U>call <SID>GotoPattern('\(^\\|\<\)[A-Za-z0-9_]', 'b
 " stored in the histroy file
 let g:netrw_dirhistmax = 0
 
+" interface
 set encoding=utf-8
 set guifont=Source\ Code\ Pro\ for\ Powerline:h14
 
+" scroll offset
 set scrolloff=3
+
+" letter case
 set ignorecase
 set smartcase
 set backspace=indent,eol,start
 
+" disable swap files
+set noswapfile
+
+" tabs
 set smarttab
 set expandtab
 set shiftwidth=2
 set tabstop=2
 
+" indentation
 filetype plugin indent on
 set autoindent
 
+" split pane
 set splitbelow splitright
 
+" colorscheme
 colorscheme afterglow
 
+" line numbers
 set number relativenumber
-
 augroup numbertoggle
   autocmd!
   autocmd FocusGained,InsertLeave * set relativenumber
