@@ -55,7 +55,7 @@ call glaive#Install()
 
 " clear status
 inoremap jj <ESC> inoremap kk <ESC>
-nnoremap <silent> <CR> :noh<CR>
+nnoremap <silent> <ESC> :noh<CR><ESC>
 
 " make j/k/0/$ move through line wrap
 nnoremap j gj
@@ -67,11 +67,21 @@ vnoremap k gk
 vnoremap 0 g0
 vnoremap q g$
 
+" remap h/j/k/l
+nnoremap gj j
+nnoremap gk k
+nnoremap g0 0
+nnoremap gq $
+vnoremap gj j
+vnoremap gk k
+vnoremap g0 0
+vnoremap gq $
+
 " remap 0 and $
 nnoremap g0 0
 nnoremap gq $
 vnoremap g0 0
-vmap gq $
+vnoremap gq $
 
 " extend 0/q functions
 nnoremap dq dg$
@@ -132,7 +142,6 @@ function! <SID>GotoPattern(pattern, dir) range
     endfor
     let @/ = g:_saved_search_reg
 endfunction
-
 nnoremap <silent> <A-l> :<C-U>call <SID>GotoPattern('\(^\\|\<\)[A-Za-z0-9_]', 'f')<CR>
 nnoremap <silent> <A-h> :<C-U>call <SID>GotoPattern('\(^\\|\<\)[A-Za-z0-9_]', 'b')<CR>
 
@@ -170,6 +179,7 @@ set splitbelow splitright
 
 " colorscheme
 colorscheme afterglow
+set background=dark
 
 " line numbers
 set number relativenumber
@@ -199,6 +209,18 @@ let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:NERDTreeDirArrowExpandable = "\u00a0"
 let g:NERDTreeDirArrowCollapsible = "\u00a0"
 let g:DevIconsEnableFoldersOpenClose = 1
+
+" ---------------------------------------------------------------------------
+" Spell Check
+" ---------------------------------------------------------------------------
+
+" check english spelling
+"set spelllang=en_us
+"inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
+
+" change spellcheck color
+"hi clear SpellBad
+"hi SpellBad cterm=underline ctermfg=red
 
 " ---------------------------------------------------------------------------
 " Prettier
@@ -295,9 +317,9 @@ autocmd BufWrite *.tex :call TmuxSend()
 " UltiSnips
 " ---------------------------------------------------------------------------
 
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+let g:UltiSnipsExpandTrigger= pumvisible() && "<CR>"
+let g:UltiSnipsJumpForwardTrigger="<TAB>"
+let g:UltiSnipsJumpBackwardTrigger="<S-TAB>"
 
 " ---------------------------------------------------------------------------
 " CoC
