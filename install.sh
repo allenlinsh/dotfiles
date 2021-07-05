@@ -26,6 +26,7 @@ apt update -qq && apt install -qqy
   \ python3
   \ python3-pip
   \ tmux
+  \ default-jdk
   \ > /dev/null 2> /dev/null
 
 # nodejs
