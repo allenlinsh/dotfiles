@@ -2,7 +2,7 @@
 ## Installation
 ### Create a config folder
 ```
-cd ~ && mkdir .config && cd .config
+cd ~ && mkdir -p .config && cd .config
 ```
 
 ### Set up repo (must install git)
